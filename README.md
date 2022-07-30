@@ -1,6 +1,6 @@
 # Camera
  
-compatible of [MediaPipe camera_utils](https://www.npmjs.com/package/@mediapipe/camera_utils)
+Compatible with [camera_utils of MediaPipe](https://www.npmjs.com/package/@mediapipe/camera_utils)
 
 ## how to use
 
