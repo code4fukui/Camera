@@ -22,7 +22,10 @@ export class Camera {
 
     this.videoElement.play();
     const f = async () => {
-      await this.opt.onFrame();
+      const w = this.videoElement.videoWidth;
+      if (w) {
+        await this.opt.onFrame();
+      }
       setTimeout(f, this.delay);
     };
     f();
