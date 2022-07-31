@@ -6,7 +6,7 @@ export class Camera {
   async start() {
     const devs = await navigator.mediaDevices.enumerateDevices();
     //console.log(devs);
-    const dev = devs.find(d => d.kind == "videoinput" && d.label.toLowerCase().indexOf("virtual") == -1);
+    const dev = devs.find(d => d.kind == "videoinput" && d.label.toLowerCase().indexOf("camera") >= 0 && d.label.toLowerCase().indexOf("virtual") == -1);
     //console.log(dev);
     const opt = {
       video: {
