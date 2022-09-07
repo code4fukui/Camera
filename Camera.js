@@ -7,7 +7,7 @@ export class Camera {
     const video = {
       width: this.opt.width || 1280,
       height: this.opt.height || 720,
-      facingMode: this.opt.backcamera ? { exact: "environment" } : "user",
+      facingMode: this.opt.backcamera ? { ideal: "environment" } : "user",
     };
     const devs = await navigator.mediaDevices.enumerateDevices();
     const dev = devs.find(d => d.kind == "videoinput" && d.label.toLowerCase().indexOf("camera") >= 0 && d.label.toLowerCase().indexOf("virtual") == -1);
