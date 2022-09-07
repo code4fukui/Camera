@@ -10,7 +10,7 @@ export class Camera {
     //console.log(dev);
     const opt = {
       video: {
-        deviceId: dev.deviceId,
+        deviceId: dev?.deviceId,
         width: this.opt.width || 1280,
         height: this.opt.height || 720,
       },
