@@ -16,7 +16,7 @@ export class Camera {
     const stream = await navigator.mediaDevices.getUserMedia({ video });
     //console.log(stream);
     this.videoElement.srcObject = stream;
-    this.delay = 1000 / (opt.fps || 30);
+    this.delay = 1000 / (this.opt.fps || 30);
     this.stream = stream;
 
     this.videoElement.play();
