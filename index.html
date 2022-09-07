@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+
+<h1>Camera.js</h1>
+<button id=btnstart>start</button> <button id=btnstop>stop</button><br>
+<br>
+<video id=video style="max-width:90vw"></video><br>
+<hr>
+<a href=https://github.com/code4fukui/Camera/>src on GitHub</a>
+
+<script type="module">
+import { Camera } from "./Camera.js";
+
+const camera = new Camera(video, {
+  onFrame: async () => {
+    // use videoElement as image
+  },
+  width: 1280,
+  height: 720,
+});
+
+btnstart.onclick = async () => {
+  camera.start();
+};
+btnstop.onclick = () => {
+  camera.stop();
+}
+</script>

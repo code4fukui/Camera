@@ -19,9 +19,14 @@ export class Camera {
     //console.log(stream);
     this.videoElement.srcObject = stream;
     this.delay = 1000 / (opt.fps || 30);
+    this.stream = stream;
 
     this.videoElement.play();
+    this.active = true;
     const f = async () => {
+      if (!this.active) {
+        return;
+      }
       const w = this.videoElement.videoWidth;
       if (w) {
         await this.opt.onFrame();
@@ -29,5 +34,12 @@ export class Camera {
       setTimeout(f, this.delay);
     };
     f();
+  }
+  async stop() {
+    this.videoElement.pause();
+    this.videoElement.srcObject = null;
+    this.stream.getVideoTracks().forEach(v => v.stop());
+    this.stream = null;
+    this.active = false;
   }
 };
