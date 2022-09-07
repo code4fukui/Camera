@@ -19,6 +19,8 @@ export class Camera {
     this.delay = 1000 / (this.opt.fps || 30);
     this.stream = stream;
 
+    this.videoElement.playsInline = true;
+    this.videoElement.autoplay = true;
     this.videoElement.play();
     this.active = true;
     const f = async () => {
