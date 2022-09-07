@@ -2,6 +2,7 @@
 
 <h1>Camera.js</h1>
 <button id=btnstart>start</button> <button id=btnstop>stop</button><br>
+<label><input type=checkbox id=chk>backcamera</label>
 <br>
 <video id=video style="max-width:90vw"></video><br>
 <hr>
@@ -10,18 +11,24 @@
 <script type="module">
 import { Camera } from "./Camera.js";
 
-const camera = new Camera(video, {
-  onFrame: async () => {
-    // use videoElement as image
-  },
-  width: 1280,
-  height: 720,
-});
+let camera = null;
 
 btnstart.onclick = async () => {
+  if (camera) {
+    camera.stop();
+  }
+  camera = new Camera(video, {
+    onFrame: async () => {
+      // use videoElement as image
+    },
+    width: 1280,
+    height: 720,
+    backcamera: chk.checked, // for back camera
+  });
   camera.start();
 };
 btnstop.onclick = () => {
   camera.stop();
+  camera = null;
 }
 </script>
