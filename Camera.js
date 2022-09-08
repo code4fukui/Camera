@@ -7,8 +7,8 @@ export class Camera {
     const w = this.opt.width || 1280;
     const h = this.opt.height || 720;
     const video = {
-      width: { min: w / 2, max: w * 1.5 >> 0 },
-      height: { min: h / 2, max: h * 1.5 >> 0 },
+      width: { ideal: w },
+      height: { ideal: h },
       facingMode: this.opt.backcamera ? { ideal: "environment" } : "user",
     };
     const devs = await navigator.mediaDevices.enumerateDevices();
