@@ -4,9 +4,11 @@ export class Camera {
     this.opt = opt;
   }
   async start() {
+    const w = this.opt.width || 1280;
+    const h = this.opt.height || 720;
     const video = {
-      width: this.opt.width || 1280,
-      height: this.opt.height || 720,
+      width: { min: w / 2, max: w * 1.5 >> 0 },
+      height: { min: h / 2, max: h * 1.5 >> 0 },
       facingMode: this.opt.backcamera ? { ideal: "environment" } : "user",
     };
     const devs = await navigator.mediaDevices.enumerateDevices();
@@ -23,24 +25,25 @@ export class Camera {
     this.videoElement.playsInline = true;
     this.videoElement.autoplay = true;
     this.videoElement.play();
-    this.active = true;
     const f = async () => {
-      if (!this.active) {
-        return;
-      }
       const w = this.videoElement.videoWidth;
       if (w) {
         await this.opt.onFrame();
       }
-      setTimeout(f, this.delay);
     };
+    this.timer = setInterval(f, this.delay);
     f();
   }
-  async stop() {
+  stop() {
     this.videoElement.pause();
     this.videoElement.srcObject = null;
     this.stream.getVideoTracks().forEach(v => v.stop());
     this.stream = null;
-    this.active = false;
+    clearInterval(this.timer);
+  }
+  flip() {
+    this.stop();
+    this.opt.backcamera = !this.opt.backcamera;
+    this.start();
   }
 };
