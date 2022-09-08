@@ -25,28 +25,38 @@ export class Camera {
     this.videoElement.playsInline = true;
     this.videoElement.autoplay = true;
     this.videoElement.play();
+    this.active = true;
+    this.endfunc = null;
     const f = async () => {
-      const v = this.videoElement;
-      if (v.readyState != HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      if (!this.active) {
+        if (this.endfunc) {
+          this.endfunc();
+        }
         return;
       }
-      if (v.videoWidth) {
+      const v = this.videoElement;
+      if (v.readyState == HTMLMediaElement.HAVE_ENOUGH_DATA) {
         await this.opt.onFrame();
       }
+      setTimeout(f, this.delay);
     };
-    this.timer = setInterval(f, this.delay);
     f();
   }
-  stop() {
-    this.videoElement.pause();
-    this.videoElement.srcObject = null;
-    this.stream.getVideoTracks().forEach(v => v.stop());
-    this.stream = null;
-    clearInterval(this.timer);
+  async stop() {
+    return new Promise((resolve) => {
+      this.videoElement.pause();
+      if (this.stream) {
+        this.stream.getVideoTracks().forEach(v => v.stop());
+        this.stream = null;
+      }
+      this.videoElement.srcObject = null;
+      this.active = false;
+      this.endfunc = resolve;
+    });
   }
-  flip() {
-    this.stop();
+  async flip() {
+    await this.stop();
     this.opt.backcamera = !this.opt.backcamera;
-    this.start();
+    await this.start();
   }
 };

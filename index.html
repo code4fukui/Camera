@@ -15,7 +15,7 @@ let camera = null;
 
 btnstart.onclick = async () => {
   if (camera) {
-    camera.stop();
+    await camera.stop();
   }
   camera = new Camera(video, {
     onFrame: async () => {
@@ -24,13 +24,17 @@ btnstart.onclick = async () => {
     backcamera: chkback.checked,
     fps: 1,
   });
-  camera.start();
+  await camera.start();
 };
-btnstop.onclick = () => {
-  camera.stop();
-  camera = null;
+btnstop.onclick = async () => {
+  if (camera) {
+    await camera.stop();
+    camera = null;
+  }
 };
-chkback.onchange = () => {
-  camera.flip();
+chkback.onchange = async () => {
+  if (camera) {
+    await camera.flip();
+  }
 }
 </script>
