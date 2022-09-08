@@ -26,8 +26,11 @@ export class Camera {
     this.videoElement.autoplay = true;
     this.videoElement.play();
     const f = async () => {
-      const w = this.videoElement.videoWidth;
-      if (w) {
+      const v = this.videoElement;
+      if (v.readyState != HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        return;
+      }
+      if (v.videoWidth) {
         await this.opt.onFrame();
       }
     };
