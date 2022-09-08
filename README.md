@@ -13,6 +13,7 @@ const camera = new Camera(videoElement, {
   },
   width: 1280,
   height: 720,
+  backcamera: true,
 });
 camera.start();
 ```
