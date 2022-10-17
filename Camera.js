@@ -11,6 +11,7 @@ export class Camera {
       height: { ideal: h },
       facingMode: this.opt.backcamera ? { ideal: "environment" } : "user",
     };
+    await navigator.mediaDevices.getUserMedia({ video: true });
     const devs = await navigator.mediaDevices.enumerateDevices();
     const dev = devs.find(d => d.kind == "videoinput" && d.label.toLowerCase().indexOf("camera") >= 0 && d.label.toLowerCase().indexOf("virtual") == -1);
     if (dev) {
