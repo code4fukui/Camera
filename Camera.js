@@ -10,19 +10,21 @@ export class Camera {
       width: { ideal: w },
       height: { ideal: h },
     };
-    if (navigator.userAgent.indexOf("iOS") >= 0) {
+    if (navigator.userAgent.indexOf("Android") == -1) {
       video.facingMode = this.opt.backcamera ? { ideal: "environment" } : "user";
     }
     await navigator.mediaDevices.getUserMedia({ video: true });
     const devs = await navigator.mediaDevices.enumerateDevices();
-    document.body.innerHTML += JSON.stringify(devs.filter(d => d.kind == "videoinput"), null, 2).replace(/\n/g, "<br>");
-
+    /*
+    const div = document.createElement("div");
+    document.body.appendChild(div);
+    div.innerHTML += JSON.stringify(devs.filter(d => d.kind == "videoinput"), null, 2).replace(/\n/g, "<br>");
+    */
     const tryToStart = async (devs) => {
       for (const dev of devs) {
         try {
-          //video.deviceId = dev.deviceId;
+          video.deviceId = dev.deviceId;
           const stream = await navigator.mediaDevices.getUserMedia({ video });
-          console.log(stream, video); 
           this.videoElement.srcObject = stream;
           this.delay = 1000 / (this.opt.fps || 30);
           this.stream = stream;
@@ -32,7 +34,6 @@ export class Camera {
           this.active = true;
           this.endfunc = null;
           const f = async () => {
-            console.log("f", this.delay, this.active)
             if (!this.active) {
               if (this.endfunc) {
                 this.endfunc();
@@ -55,10 +56,11 @@ export class Camera {
 
     let devs2 = devs.filter(d => {
       const l = d.label.toLowerCase();
+      const back = l.indexOf("back") >= 0 || l.indexOf("背面") >= 0;
       return d.kind == "videoinput" &&
         //l.indexOf("camera") >= 0 &&
         l.indexOf("virtual") == -1 &&
-        (this.opt.backcamera ? l.indexOf("back") >= 0 : l.indexOf("back") == -1);
+        this.opt.backcamera == back;
     });
     if (devs2.length > 0) {
       await tryToStart(devs2);
