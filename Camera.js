@@ -9,39 +9,70 @@ export class Camera {
     const video = {
       width: { ideal: w },
       height: { ideal: h },
-      facingMode: this.opt.backcamera ? { ideal: "environment" } : "user",
     };
+    if (navigator.userAgent.indexOf("iOS") >= 0) {
+      video.facingMode = this.opt.backcamera ? { ideal: "environment" } : "user";
+    }
     await navigator.mediaDevices.getUserMedia({ video: true });
     const devs = await navigator.mediaDevices.enumerateDevices();
-    const dev = devs.find(d => d.kind == "videoinput" && d.label.toLowerCase().indexOf("camera") >= 0 && d.label.toLowerCase().indexOf("virtual") == -1);
-    if (dev) {
-      video.deviceId = dev.deviceId;
-    }
-    const stream = await navigator.mediaDevices.getUserMedia({ video });
-    //console.log(stream);
-    this.videoElement.srcObject = stream;
-    this.delay = 1000 / (this.opt.fps || 30);
-    this.stream = stream;
+    document.body.innerHTML += JSON.stringify(devs.filter(d => d.kind == "videoinput"), null, 2).replace(/\n/g, "<br>");
 
-    this.videoElement.playsInline = true;
-    this.videoElement.autoplay = true;
-    this.videoElement.play();
-    this.active = true;
-    this.endfunc = null;
-    const f = async () => {
-      if (!this.active) {
-        if (this.endfunc) {
-          this.endfunc();
+    const tryToStart = async (devs) => {
+      for (const dev of devs) {
+        try {
+          //video.deviceId = dev.deviceId;
+          const stream = await navigator.mediaDevices.getUserMedia({ video });
+          console.log(stream, video); 
+          this.videoElement.srcObject = stream;
+          this.delay = 1000 / (this.opt.fps || 30);
+          this.stream = stream;
+          this.videoElement.playsInline = true;
+          this.videoElement.autoplay = true;
+          this.videoElement.play();
+          this.active = true;
+          this.endfunc = null;
+          const f = async () => {
+            console.log("f", this.delay, this.active)
+            if (!this.active) {
+              if (this.endfunc) {
+                this.endfunc();
+              }
+              return;
+            }
+            const v = this.videoElement;
+            if (v.readyState == HTMLMediaElement.HAVE_ENOUGH_DATA) {
+              await this.opt.onFrame();
+            }
+            setTimeout(f, this.delay);
+          };
+          f();
+          return;
+        } catch (e) {
+          console.log(e);
         }
-        return;
       }
-      const v = this.videoElement;
-      if (v.readyState == HTMLMediaElement.HAVE_ENOUGH_DATA) {
-        await this.opt.onFrame();
-      }
-      setTimeout(f, this.delay);
     };
-    f();
+
+    let devs2 = devs.filter(d => {
+      const l = d.label.toLowerCase();
+      return d.kind == "videoinput" &&
+        //l.indexOf("camera") >= 0 &&
+        l.indexOf("virtual") == -1 &&
+        (this.opt.backcamera ? l.indexOf("back") >= 0 : l.indexOf("back") == -1);
+    });
+    if (devs2.length > 0) {
+      await tryToStart(devs2);
+    } else {
+      devs2 = devs.filter(d => {
+        const l = d.label.toLowerCase();
+        return d.kind == "videoinput" &&
+          //l.indexOf("camera") >= 0 &&
+          l.indexOf("virtual") == -1;
+      });
+      if (devs2.length > 0) {
+        await tryToStart(devs2);
+      }
+    }
   }
   async stop() {
     return new Promise((resolve) => {
