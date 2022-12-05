@@ -15,6 +15,7 @@ export class Camera {
     }
     await navigator.mediaDevices.getUserMedia({ video: true });
     const devs = await navigator.mediaDevices.enumerateDevices();
+    //console.log(devs);
     /*
     const div = document.createElement("div");
     document.body.appendChild(div);
@@ -59,9 +60,11 @@ export class Camera {
       const back = l.indexOf("back") >= 0 || l.indexOf("背面") >= 0;
       return d.kind == "videoinput" &&
         //l.indexOf("camera") >= 0 &&
+        l.indexOf("immersed") == -1 &&
         l.indexOf("virtual") == -1 &&
         this.opt.backcamera == back;
     });
+    //console.log("devs2", devs2)
     if (devs2.length > 0) {
       await tryToStart(devs2);
     } else {
@@ -69,6 +72,7 @@ export class Camera {
         const l = d.label.toLowerCase();
         return d.kind == "videoinput" &&
           //l.indexOf("camera") >= 0 &&
+          l.indexOf("immersed") == -1 &&
           l.indexOf("virtual") == -1;
       });
       if (devs2.length > 0) {
