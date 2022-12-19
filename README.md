@@ -2,6 +2,10 @@
  
 Compatible with [camera_utils of MediaPipe](https://www.npmjs.com/package/@mediapipe/camera_utils)
 
+## test
+
+https://code4fukui.github.io/Camera/
+
 ## how to use
 
 ```js
