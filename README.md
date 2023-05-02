@@ -9,7 +9,7 @@ https://code4fukui.github.io/Camera/
 ## how to use
 
 ```js
-import { Camera } from "https://code4fukui.gtihub.io/Camera/Camera.js";
+import { Camera } from "https://code4fukui.github.io/Camera/Camera.js";
 
 const camera = new Camera(videoElement, {
   onFrame: async () => {
