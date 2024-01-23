@@ -2,6 +2,7 @@ export class Camera {
   constructor(videoElement, opt) {
     this.videoElement = videoElement;
     this.opt = opt;
+    this.onFrame = opt.onFrame;
   }
   async start() {
     const w = this.opt.width || 1280;
@@ -43,7 +44,7 @@ export class Camera {
             }
             const v = this.videoElement;
             if (v.readyState == HTMLMediaElement.HAVE_ENOUGH_DATA) {
-              await this.opt.onFrame();
+              if (this.onFrame) await this.onFrame();
             }
             setTimeout(f, this.delay);
           };
