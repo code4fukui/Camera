@@ -4,6 +4,8 @@
 <button id=btnstart>start</button> <button id=btnstop>stop</button>
 <label><input type=checkbox id=chkback checked>backcamera</label>
 <label><input type=checkbox id=chkmirror>mirror</label>
+<button id=btnfront>front camera</button>
+<button id=btnback>back camera</button>
 <br>
 <video id=video style="max-width:90vw"></video><br>
 <hr>
@@ -40,5 +42,11 @@ chkback.onchange = async () => {
 };
 chkmirror.onchange = () => {
   video.style.transform = chkmirror.checked ? "scale(-1,1)" : "scale(1,1)";
+};
+btnback.onclick = async () => {
+  camera.setBackCamera(true);
+};
+btnfront.onclick = async () => {
+  camera.setBackCamera(false);
 };
 </script>

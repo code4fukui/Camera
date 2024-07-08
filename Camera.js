@@ -1,7 +1,7 @@
 export class Camera {
   constructor(videoElement, opt) {
     this.videoElement = videoElement;
-    this.opt = opt;
+    this.opt = opt || {};
     this.onFrame = opt.onFrame;
   }
   async start() {
@@ -96,6 +96,12 @@ export class Camera {
   async flip() {
     await this.stop();
     this.opt.backcamera = !this.opt.backcamera;
+    await this.start();
+  }
+  async setBackCamera(b) {
+    if (this.opt.backcamera == b) return;
+    await this.stop();
+    this.opt.backcamera = b;
     await this.start();
   }
 };
