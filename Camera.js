@@ -65,7 +65,6 @@ export class Camera {
         l.indexOf("virtual") == -1 &&
         this.opt.backcamera == back;
     });
-    //console.log("devs2", devs2)
     if (devs2.length > 0) {
       await tryToStart(devs2);
     } else {
@@ -76,7 +75,11 @@ export class Camera {
           l.indexOf("immersed") == -1 &&
           l.indexOf("virtual") == -1;
       });
-      if (devs2.length > 0) {
+      if (this.opt.backcamera && devs2.length > 1) {
+        const devs3 = [];
+        for (let i = 1; i < devs2.length; i++) devs3.push(devs2[i]);
+        await tryToStart(devs3);
+      } else if (devs2.length > 0) {
         await tryToStart(devs2);
       }
     }
