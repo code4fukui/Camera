@@ -1,12 +1,18 @@
 # Camera
- 
-Compatible with [camera_utils of MediaPipe](https://www.npmjs.com/package/@mediapipe/camera_utils)
 
-## test
+Compatible with the [camera_utils of MediaPipe](https://www.npmjs.com/package/@mediapipe/camera_utils).
+
+## Demo
 
 https://code4fukui.github.io/Camera/
 
-## how to use
+## Features
+
+- Supports front and back camera access
+- Configurable video resolution and frame rate
+- Provides callback function for processing the video frame
+
+## Usage
 
 ```js
 import { Camera } from "https://code4fukui.github.io/Camera/Camera.js";
@@ -21,3 +27,7 @@ const camera = new Camera(videoElement, {
 });
 camera.start();
 ```
+
+## License
+
+MIT License
