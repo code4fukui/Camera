@@ -3,11 +3,9 @@
 MediaPipeのcamera_utilsと互換性のあるカメラ処理ライブラリです。
 
 ## デモ
-
 https://code4fukui.github.io/Camera/
 
 ## 機能
-
 - 前面/背面カメラへのアクセスをサポート
 - 動画の解像度やフレームレートを設定可能
 - 動画フレーム処理用のコールバック関数を提供
@@ -29,5 +27,4 @@ camera.start();
 ```
 
 ## ライセンス
-
 MIT License
